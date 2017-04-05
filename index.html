@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Map App</title>
+    <script src="js/knockout-3.4.2.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="css/master.css">
+  </head>
+  <body>
+    <div class="float">
+      <p data-bind="text: title" class="title"></p>
+      <div class="fliter">
+        <ul data-bind="foreach: conference">
+          <li class="options" data-bind="text: $data, click: fliterInfo"></li>
+        </ul>
+      </div>
+      <div data-bind="foreach: teamsList" class="list-view">
+        <div class="list-item">
+          <p data-bind="text: home" class="list-item-title"></p>
+          <p data-bind="text: team"class="list-item-description"></p>
+        </div>
+        <!-- <p data-bind="text: name" class="list-item-title"></p>
+        <p data-bind="text: description"class="list-item-description"></p> -->
+      </div>
+    </div>
+    <div class="back-ground" id="map"></div>
+
+    <script type="text/html" id="listLoc">
+      <li class='list-item'>
+        <p data-bind="text: name" class="list-item-title"></p>
+        <p class="list-item-description"></p>
+      </li>
+    </script>
+
+    <script src="js/main.js" charset="utf-8"></script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-qtT3pvGDyIvFCYyeqeCCngYfaZ-bHqg&callback=initMap" charset="utf-8">
+    </script>
+  </body>
+</html>

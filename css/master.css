@@ -1,0 +1,77 @@
+html,body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.float {
+  position: fixed;
+  margin: 10px;
+  padding: 14px;
+  box-shadow: 0px 1px 5px 1px rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
+  background-color: white;
+  z-index: 10;
+}
+
+.fliter {
+  height: 40px;
+  border-bottom: solid 2px rgba(255, 0, 0, 0.5);
+}
+
+.list-view {
+  max-height: 400px;
+  overflow-y: scroll;
+}
+
+.options {
+  float: left;
+  text-align: center;
+  width: 70px;
+  position: relative;
+  padding: 6px 0;
+  border: solid;
+  border-width: 1px;
+  border-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(255, 0, 0, 0.1);
+  font-size: 12px;
+}
+
+.list-item-title {
+  padding-top: 10px;
+  margin: 0px;
+  font-weight: bold;
+}
+
+.list-item-description {
+  margin-top: 4px;
+  margin-bottom: 0px;
+  padding-bottom: 10px;
+  font-size: 14px;
+  border-bottom: solid 1px rgba(0, 0, 0, 0.1);
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.title {
+  margin-top: 8px;
+  margin-buttom: 8px;
+}
+
+#map {
+  background-color: rgba(255, 0, 0, 0.5);
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+  padding: 0;
+  margin: 0;
+}
+
+#pano {
+  width: 400px;
+  height: 270px;
+}
