@@ -16,7 +16,7 @@
       </div>
       <div data-bind="foreach: teamsList" class="list-view">
         <div class="list-item">
-          <p data-bind="text: home" class="list-item-title"></p>
+          <p data-bind="text: home, click: selectedHome" class="list-item-title"></p>
           <p data-bind="text: team"class="list-item-description"></p>
         </div>
         <!-- <p data-bind="text: name" class="list-item-title"></p>

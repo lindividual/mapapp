@@ -193,9 +193,6 @@ var map;
 //array of all markers
 var markers = [];
 
-//array of flited markers
-var flitedMarker = [];
-
 //array store the teams that will be display
 var displayteams = [].concat(teams);
 
@@ -209,31 +206,35 @@ function initMap() {
   // infowindow
   var infoWindow = new google.maps.InfoWindow();
 
+  //geocoder
+  var geocoder = new google.maps.Geocoder();
+
   //style of defaultIcon
   var defaultIcon = makeMarkerIcon('0091ff');
 
   //use the teams array to generate an array of markers
   function showMarkers() {
     for (var i = 0; i < displayteams.length; i++) {
-    var position = displayteams[i].location;
-    var title = displayteams[i].name;
-    //create a marker pre location
-    var marker = new google.maps.Marker({
-      position: position,
-      title: title,
-      animation: google.maps.Animation.DROP,
-      icon: defaultIcon,
-      id: i
-    });
-    //show marker
-    marker.setMap(map);
-    //create an onclick event to open the infowindow at each marker
-    marker.addListener('click', function(){
-      popInfoWindow(this, infoWindow);
-    });
-    //push the marker into markers array
-    markers.push(marker);
-  }}
+      // var position = displayteams[i].location;
+      // var title = displayteams[i].name;
+      // //create a marker pre location
+      // var marker = new google.maps.Marker({
+      //   position: position,
+      //   title: title,
+      //   animation: google.maps.Animation.DROP,
+      //   icon: defaultIcon,
+      //   id: i
+      // });
+      // //show marker
+      // marker.setMap(map);
+      // //create an onclick event to open the infowindow at each marker
+      // marker.addListener('click', popInfoWindow(this, infoWindow));
+      // //push the marker into markers array
+      // markers.push(marker);
+      geocodeAddress(displayteams[i].home, geocoder, map);
+      console.log('init');
+    }
+  }
 
   //infoWindow
   function popInfoWindow(marker, infowindow) {
@@ -279,9 +280,6 @@ function initMap() {
     }
   }
 
-  //show markers
-
-
   //marker style
   function makeMarkerIcon(markerColor) {
     var markerImage = new google.maps.MarkerImage(
@@ -292,6 +290,21 @@ function initMap() {
       new google.maps.Point(10, 34),
       new google.maps.Size(21,34));
     return markerImage;
+  }
+
+  function geocodeAddress(addr, geocoder, resultsMap) {
+  var address = addr;
+  geocoder.geocode({'address': address}, function(results, status) {
+    if (status === google.maps.GeocoderStatus.OK) {
+      resultsMap.setCenter(results[0].geometry.location);
+      var marker = new google.maps.Marker({
+        map: resultsMap,
+        position: results[0].geometry.location
+      });
+    } else {
+      alert('Geocode was not successful for the following reason: ' + status);
+    }
+  });
   }
 }
 
@@ -311,6 +324,21 @@ var viewModel = function() {
     // teamsList.removeAll();
     displayFlitedteams(clickedItem, teams);
     console.log(clickedItem);
+  };
+
+  this.selectedHome = function(clickedItem) {
+      //create a marker pre location
+      var marker = new google.maps.Marker({
+        position: {lat: 385323.90, lng: 770032.60},
+        title: title,
+        animation: google.maps.Animation.DROP,
+        // icon: defaultIcon,
+        // id: i
+      });
+      //show marker
+      marker.setMap(map);
+      // initMap();
+      console.log('show marker');
   };
 };
 
