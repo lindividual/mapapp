@@ -82,6 +82,36 @@ ul {
 }
 
 #pano {
-  width: 400px;
-  height: 270px;
+  width: 100%;
+  height: 60%;
+}
+.pop-window-bg {
+  background-color: rgba(0, 0, 0, 0.2);
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 15;
+}
+
+.pop-window {
+  background-color: white;
+  position: absolute;
+  top: 10%;
+  left: 15%;
+  margin: 0 auto;
+  padding: 16px;
+  width: 70%;
+  height: 70%;
+  overflow-y: scroll;
+  z-index: 20;
+}
+
+.close {
+  position: absolute;
+  right: 16px;
+  top: 16px;
 }

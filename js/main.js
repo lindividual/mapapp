@@ -1,5 +1,8 @@
 
 //model
+//title
+var bigTitle = "Home of NBA Teams";
+
 //Conference
 var conference = ['All', 'East', 'West'];
 
@@ -217,143 +220,108 @@ var teams = [
   }
 ];
 
-// map
-var map;
-
-//array of all markers
-var markers = [];
+//newList
+var newsList = [];
 
 //array store the teams that will be display
 var displayteams = [].concat(teams);
-
-function initMap() {
-  //create a new map
-  map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: 40.7713024, lng: -73.9632393},
-    zoom: 15
-  });
-
-  // infowindow
-  largeInfoWindow = new google.maps.InfoWindow();
-
-  //style of defaultIcon
-  var defaultIcon = makeMarkerIcon('0091ff');
-  var highlightedIcon = makeMarkerIcon('FFFF24');
-
-
-  var bounds = new google.maps.LatLngBounds();
-
-  for (var i = 0; i < displayteams.length; i++) {
-    var position = displayteams[i].position;
-    var title = displayteams[i].home;
-    //create a marker pre location
-    var marker = new google.maps.Marker({
-      position: position,
-      title: title,
-      animation: google.maps.Animation.DROP,
-      icon: defaultIcon,
-      id: i
-    });
-    //show marker
-    marker.setMap(map);
-    //create an onclick event to open the infowindow at each marker
-    marker.addListener('click', function() {
-      popInfoWindow(this, largeInfoWindow);
-    });
-    //push the marker into markers array
-    markers.push(marker);
-    //set bounds
-    bounds.extend(marker.position);
-  }
-
-  console.log(markers);
-
-  map.fitBounds(bounds);
-
-
-  //marker style
-  function makeMarkerIcon(markerColor) {
-    var markerImage = new google.maps.MarkerImage(
-      'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor +
-      '|40|_|%E2%80%A2',
-      new google.maps.Size(21, 34),
-      new google.maps.Point(0, 0),
-      new google.maps.Point(10, 34),
-      new google.maps.Size(21,34));
-    return markerImage;
-  }
-}
-
-  //infoWindow
-function popInfoWindow(marker, infowindow) {
-  // Check to make sure the infowindow is not already opened on this marker.
-  if (infowindow.marker != marker) {
-    // Clear the infowindow content to give the streetview time to load.
-    infowindow.setContent('');
-    infowindow.marker = marker;
-    // Make sure the marker property is cleared if the infowindow is closed.
-    infowindow.addListener('closeclick', function() {
-      infowindow.marker = null;
-    });
-    var streetViewService = new google.maps.StreetViewService();
-    var radius = 50;
-    // In case the status is OK, which means the pano was found, compute the
-    // position of the streetview image, then calculate the heading, then get a
-    // panorama from that and set the options
-    function getStreetView(data, status) {
-      if (status == google.maps.StreetViewStatus.OK) {
-        var nearStreetViewLocation = data.location.latLng;
-        var heading = google.maps.geometry.spherical.computeHeading(
-          nearStreetViewLocation, marker.position);
-          infowindow.setContent('<div>' + marker.title + '</div><div id="pano"></div>');
-          var panoramaOptions = {
-            position: nearStreetViewLocation,
-            pov: {
-              heading: heading,
-              pitch: 30
-            }
-          };
-        var panorama = new google.maps.StreetViewPanorama(
-          document.getElementById('pano'), panoramaOptions);
-      } else {
-        infowindow.setContent('<div>' + marker.title + '</div>' +
-          '<div>No Street View Found</div>');
-      }
-    }
-    // Use streetview service to get the closest streetview image within
-    // 50 meters of the markers position
-    streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
-    // Open the infowindow on the correct marker.
-    infowindow.open(map, marker);
-  }
-}
 
 
 //view model
 var viewModel = function() {
   var self = this;
   //bindings
-  this.title = "Home of NBA Teams";
-  this.fliter = ko.observableArray(conference);
-  this.teamsList = ko.observableArray(displayteams);
+  self.title = ko.observable(bigTitle);
+  self.windowTitle = ko.observable(bigTitle);
+  self.fliter = ko.observableArray(conference);
+  self.teamsList = ko.observableArray(displayteams);
+  self.newsList = ko.observableArray(newsList);
+  self.showNewsList = ko.observable(false);
 
-  this.fliterInfo = function(clickedItem) {
+  var markers = [];
+
+  self.initMap = function() {
+  //create a new map
+    map = new google.maps.Map(document.getElementById('map'), {
+      center: {lat: 40.7713024, lng: -73.9632393},
+      zoom: 15
+    });
+
+    //style of defaultIcon
+    var defaultIcon = makeMarkerIcon('0091ff');
+    var highlightedIcon = makeMarkerIcon('FFFF24');
+
+
+    var bounds = new google.maps.LatLngBounds();
+
+    for (var i = 0; i < displayteams.length; i++) {
+      var position = displayteams[i].position;
+      var title = displayteams[i].home;
+      //create a marker pre location
+      var marker = new google.maps.Marker({
+        position: position,
+        title: title,
+        animation: google.maps.Animation.DROP,
+        icon: defaultIcon,
+        id: i
+      });
+      //show marker
+      marker.setMap(map);
+      //create an onclick event to open the infowindow at each marker
+      marker.addListener('click', function() {
+        showNewsList(true);
+        windowTitle(this.title);
+        popInfoWindow(this);
+        requestNewsList(this.title);
+      });
+      //push the marker into markers array
+      markers.push(marker);
+      //set bounds
+      bounds.extend(marker.position);
+    }
+
+    console.log(markers);
+
+    map.fitBounds(bounds);
+
+
+    //marker style
+    function makeMarkerIcon(markerColor) {
+      var markerImage = new google.maps.MarkerImage(
+        'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor +
+        '|40|_|%E2%80%A2',
+        new google.maps.Size(21, 34),
+        new google.maps.Point(0, 0),
+        new google.maps.Point(10, 34),
+        new google.maps.Size(21,34));
+      return markerImage;
+    }
+  };
+
+  self.fliterInfo = function(clickedItem) {
     // teamsList.removeAll();
     displayFlitedteams(clickedItem, teams);
     // initMap();
     console.log(clickedItem);
   };
 
-  this.selectedHome = function(clickedItem) {
+  self.selectedHome = function(clickedItem) {
     var homeTitle = clickedItem.home;
     for (var i = 0; i < markers.length; i++) {
         var markerTitle = markers[i].title;
         if (homeTitle == markerTitle) {
-          popInfoWindow(markers[i], largeInfoWindow);
+          showNewsList(true);
+          windowTitle(markerTitle);
+          popInfoWindow(markers[i]);
+          requestNewsList(markerTitle);
         } else {
           console.log('not me');
         }
     }
+  };
+
+  self.closePopWindow = function() {
+    showNewsList(false);
   };
 };
 
@@ -365,6 +333,57 @@ function displayFlitedteams(conf, teams) {
       teamsList.push(team);
     }
   }, this);
+}
+
+//request newsList
+function requestNewsList(keyWord) {
+  var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
+  url += '?' + $.param({
+    'api-key': "bd9a2c95d47c48ba87a31333fcba2648",
+    'q': keyWord
+  });
+  $.ajax({
+    url: url,
+    method: 'GET',
+  }).done(function(result) {
+    console.log('done!');
+    newsList.removeAll();
+    for (var i = 0; i < 5; i++) {
+      var newsTitle = result.response.docs[i].headline.print_headline;
+      newsList.push(newsTitle); 
+    }
+  }).fail(function(err) {
+    throw err;
+  });
+}
+
+//infoWindow
+function popInfoWindow(marker) {
+    var streetViewService = new google.maps.StreetViewService();
+    var radius = 50;
+    function getStreetView(data, status) {
+      if (status == google.maps.StreetViewStatus.OK) {
+        var nearStreetViewLocation = data.location.latLng;
+        var heading = google.maps.geometry.spherical.computeHeading(
+          nearStreetViewLocation, marker.position);
+          // infowindow.setContent('<h1>' + marker.title + '</h1>');
+          var panoramaOptions = {
+            position: nearStreetViewLocation,
+            pov: {
+              heading: heading,
+              pitch: 30
+            }
+          };
+        var panorama = new google.maps.StreetViewPanorama(
+          document.getElementById('pano'), panoramaOptions);
+      } else {
+        var t=document.createTextNode("No Street View Was Found!");
+        document.getElementById('pano').appendChild(t);
+      }
+    }
+    // Use streetview service to get the closest streetview image within
+    // 50 meters of the markers position
+    streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
 }
 
 //activates knokout.js
