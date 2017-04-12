@@ -6,7 +6,7 @@ var bigTitle = "Home of NBA Teams";
 //Conference
 var conference = ['All', 'East', 'West'];
 
-//NBA Teams
+//Teams
 var teams = [
   {
     team: 'Atlanta Hawks',
@@ -220,12 +220,38 @@ var teams = [
   }
 ];
 
+<<<<<<< HEAD
+//map
+var map;
+
+//array of all markers
+var markers = [];
+=======
 //newList
 var newsList = [];
+>>>>>>> refs/remotes/origin/master
 
 //array store the teams that will be display
 var displayteams = [].concat(teams);
 
+<<<<<<< HEAD
+function initMap() {
+  //create a new map
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: 40.7713024, lng: -73.9632393},
+    zoom: 15
+  });
+
+  //infowindow
+  largeInfoWindow = new google.maps.InfoWindow();
+
+  //style of defaultIcon
+  var defaultIcon = makeMarkerIcon('0091ff');
+  var highlightedIcon = makeMarkerIcon('FFFF24');
+
+  //map bounds
+  var bounds = new google.maps.LatLngBounds();
+=======
 
 //view model
 var viewModel = function() {
@@ -239,6 +265,7 @@ var viewModel = function() {
   self.showNewsList = ko.observable(false);
 
   var markers = [];
+>>>>>>> refs/remotes/origin/master
 
   self.initMap = function() {
   //create a new map
@@ -246,6 +273,64 @@ var viewModel = function() {
       center: {lat: 40.7713024, lng: -73.9632393},
       zoom: 15
     });
+<<<<<<< HEAD
+    //push the marker into markers array
+    markers.push(marker);
+    //set bounds
+    bounds.extend(marker.position);
+  }
+
+  map.fitBounds(bounds);
+
+  //marker style
+  function makeMarkerIcon(markerColor) {
+    var markerImage = new google.maps.MarkerImage(
+      'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor +
+      '|40|_|%E2%80%A2',
+      new google.maps.Size(21, 34),
+      new google.maps.Point(0, 0),
+      new google.maps.Point(10, 34),
+      new google.maps.Size(21,34));
+    return markerImage;
+  }
+}
+
+//pop infoWindow
+function popInfoWindow(marker, infowindow) {
+  // Check to make sure the infowindow is not already opened on this marker.
+  if (infowindow.marker != marker) {
+    // Clear the infowindow content to give the streetview time to load.
+    infowindow.setContent('');
+    infowindow.marker = marker;
+    // Make sure the marker property is cleared if the infowindow is closed.
+    infowindow.addListener('closeclick', function() {
+      infowindow.marker = null;
+    });
+    var streetViewService = new google.maps.StreetViewService();
+    var radius = 50;
+    // In case the status is OK, which means the pano was found, compute the
+    // position of the streetview image, then calculate the heading, then get a
+    // panorama from that and set the options
+    function getStreetView(data, status) {
+      if (status == google.maps.StreetViewStatus.OK) {
+        var nearStreetViewLocation = data.location.latLng;
+        var heading = google.maps.geometry.spherical.computeHeading(
+          nearStreetViewLocation, marker.position);
+          infowindow.setContent('<div>' + marker.title + '</div><div id="pano"></div>');
+          var panoramaOptions = {
+            position: nearStreetViewLocation,
+            pov: {
+              heading: heading,
+              pitch: 30
+            }
+          };
+        var panorama = new google.maps.StreetViewPanorama(
+          document.getElementById('pano'), panoramaOptions);
+      } else {
+        infowindow.setContent('<div>' + marker.title + '</div>' +
+          '<div>No Street View Found</div>');
+      }
+=======
 
     //style of defaultIcon
     defaultIcon = makeMarkerIcon('0091ff');
@@ -263,6 +348,7 @@ var viewModel = function() {
         new google.maps.Point(10, 34),
         new google.maps.Size(21,34));
       return markerImage;
+>>>>>>> refs/remotes/origin/master
     }
     // for (var i = 0; i < displayteams.length; i++) {
     //   var position = displayteams[i].position;
@@ -328,8 +414,12 @@ var viewModel = function() {
     markers.length = 0;
   };
 
+<<<<<<< HEAD
+  this.fliterInfo = function(clickedItem) {
+=======
   self.fliterInfo = function(clickedItem) {
     // teamsList.removeAll();
+>>>>>>> refs/remotes/origin/master
     displayFlitedteams(clickedItem, teams);
     console.log(clickedItem);
   };
