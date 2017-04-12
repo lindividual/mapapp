@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>Map App</title>
     <script src="js/knockout-3.4.2.js" charset="utf-8"></script>
+    <script src="js/jquery.min.js" charset="utf-8"></script>
     <link rel="stylesheet" href="css/master.css">
   </head>
   <body>
@@ -13,8 +14,8 @@
       <p data-bind="text: title" class="title"></p>
       <!-- //fliter -->
       <div class="fliter">
-        <ul data-bind="foreach: conference">
-          <li class="options" data-bind="text: $data, click: fliterInfo"></li>
+        <ul data-bind="foreach: fliter">
+          <li class="options list-item-title" data-bind="text: $data, click: fliterInfo"></li>
         </ul>
       </div>
       <!-- list -->
@@ -29,7 +30,23 @@
     </div>
     <!-- map -->
     <div class="back-ground" id="map"></div>
+<<<<<<< HEAD
     <!-- js files-->
+=======
+    <div class="pop-window-bg" data-bind="visible: showNewsList">
+      <div class="pop-window">
+        <h1 class="title" data-bind="text: windowTitle">Detail</h1>
+        <div class="close" data-bind="click: closePopWindow">close</div>
+        <div id="pano"></div>
+        <div class="news-list">
+          <h2>News</h2>
+          <ul data-bind="foreach: newsList">
+            <li class="list-item-title" data-bind="text: $data"></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+>>>>>>> refs/remotes/origin/master
     <script src="js/main.js" charset="utf-8"></script>
     <!-- googlemap -->
     <script async defer
