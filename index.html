@@ -7,13 +7,17 @@
     <link rel="stylesheet" href="css/master.css">
   </head>
   <body>
+    <!-- float window -->
     <div class="float">
+      <!-- title -->
       <p data-bind="text: title" class="title"></p>
+      <!-- //fliter -->
       <div class="fliter">
         <ul data-bind="foreach: conference">
           <li class="options" data-bind="text: $data, click: fliterInfo"></li>
         </ul>
       </div>
+      <!-- list -->
       <div data-bind="foreach: teamsList" class="list-view">
         <div class="list-item">
           <p data-bind="text: home, click: selectedHome" class="list-item-title"></p>
@@ -23,9 +27,11 @@
         <p data-bind="text: description"class="list-item-description"></p> -->
       </div>
     </div>
+    <!-- map -->
     <div class="back-ground" id="map"></div>
-    
+    <!-- js files-->
     <script src="js/main.js" charset="utf-8"></script>
+    <!-- googlemap -->
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-qtT3pvGDyIvFCYyeqeCCngYfaZ-bHqg&callback=initMap" charset="utf-8">
     </script>

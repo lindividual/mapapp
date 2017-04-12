@@ -2,6 +2,7 @@ html,body {
   height: 100%;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 .float {
@@ -27,7 +28,7 @@ html,body {
 .options {
   float: left;
   text-align: center;
-  width: 70px;
+  width: 32%;
   position: relative;
   padding: 6px 0;
   border: solid;
@@ -68,8 +69,8 @@ ul {
 }
 
 .title {
-  margin-top: 8px;
-  margin-bottom: 8px;
+  margin-top: 0px;
+  margin-bottom: 16px;
 }
 
 #map {
@@ -82,6 +83,24 @@ ul {
 }
 
 #pano {
-  width: 400px;
+  width: 500px;
   height: 270px;
+}
+
+@media (max-width: 375px) {
+  .float {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 16px;
+    width: 100%;
+  }
+  .title {
+    margin-bottom: 0;
+  }
+  .fliter {
+    display: none;
+  }
+  .list-view {
+    display: none;
+  }
 }

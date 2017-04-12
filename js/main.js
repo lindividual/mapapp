@@ -3,7 +3,7 @@
 //Conference
 var conference = ['All', 'East', 'West'];
 
-//NBA Teams
+//Teams
 var teams = [
   {
     team: 'Atlanta Hawks',
@@ -217,7 +217,7 @@ var teams = [
   }
 ];
 
-// map
+//map
 var map;
 
 //array of all markers
@@ -233,14 +233,14 @@ function initMap() {
     zoom: 15
   });
 
-  // infowindow
+  //infowindow
   largeInfoWindow = new google.maps.InfoWindow();
 
   //style of defaultIcon
   var defaultIcon = makeMarkerIcon('0091ff');
   var highlightedIcon = makeMarkerIcon('FFFF24');
 
-
+  //map bounds
   var bounds = new google.maps.LatLngBounds();
 
   for (var i = 0; i < displayteams.length; i++) {
@@ -266,10 +266,7 @@ function initMap() {
     bounds.extend(marker.position);
   }
 
-  console.log(markers);
-
   map.fitBounds(bounds);
-
 
   //marker style
   function makeMarkerIcon(markerColor) {
@@ -284,7 +281,7 @@ function initMap() {
   }
 }
 
-  //infoWindow
+//pop infoWindow
 function popInfoWindow(marker, infowindow) {
   // Check to make sure the infowindow is not already opened on this marker.
   if (infowindow.marker != marker) {
@@ -338,9 +335,7 @@ var viewModel = function() {
   this.teamsList = ko.observableArray(displayteams);
 
   this.fliterInfo = function(clickedItem) {
-    // teamsList.removeAll();
     displayFlitedteams(clickedItem, teams);
-    // initMap();
     console.log(clickedItem);
   };
 
