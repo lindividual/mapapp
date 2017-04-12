@@ -248,20 +248,59 @@ var viewModel = function() {
     });
 
     //style of defaultIcon
-    var defaultIcon = makeMarkerIcon('0091ff');
-    var highlightedIcon = makeMarkerIcon('FFFF24');
+    defaultIcon = makeMarkerIcon('0091ff');
 
+    bounds = new google.maps.LatLngBounds();
 
-    var bounds = new google.maps.LatLngBounds();
+    renderMarkers();
 
-    for (var i = 0; i < displayteams.length; i++) {
-      var position = displayteams[i].position;
-      var title = displayteams[i].home;
+    function makeMarkerIcon(markerColor) {
+      var markerImage = new google.maps.MarkerImage(
+        'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor +
+        '|40|_|%E2%80%A2',
+        new google.maps.Size(21, 34),
+        new google.maps.Point(0, 0),
+        new google.maps.Point(10, 34),
+        new google.maps.Size(21,34));
+      return markerImage;
+    }
+    // for (var i = 0; i < displayteams.length; i++) {
+    //   var position = displayteams[i].position;
+    //   var title = displayteams[i].home;
+    //   //create a marker pre location
+    //   var marker = new google.maps.Marker({
+    //     position: position,
+    //     title: title,
+    //     animation: google.maps.Animation.DROP,
+    //     icon: defaultIcon,
+    //     id: i
+    //   });
+    //   //show marker
+    //   marker.setMap(map);
+    //   //create an onclick event to open the infowindow at each marker
+    //   marker.addListener('click', function() {
+    //     showNewsList(true);
+    //     windowTitle(this.title);
+    //     popInfoWindow(this);
+    //     requestNewsList(this.title);
+    //   });
+    //   //push the marker into markers array
+    //   markers.push(marker);
+    //   //set bounds
+    //   bounds.extend(marker.position);
+  };
+    //marker style
+    
+
+  self.renderMarkers = function() {
+    console.log('startRendering');
+    for (var i = 0; i < teamsList().length; i++) {
+      var position = teamsList()[i].position;
+      var title = teamsList()[i].home;
       //create a marker pre location
       var marker = new google.maps.Marker({
         position: position,
         title: title,
-        animation: google.maps.Animation.DROP,
         icon: defaultIcon,
         id: i
       });
@@ -279,29 +318,19 @@ var viewModel = function() {
       //set bounds
       bounds.extend(marker.position);
     }
-
-    console.log(markers);
-
     map.fitBounds(bounds);
+  };
 
-
-    //marker style
-    function makeMarkerIcon(markerColor) {
-      var markerImage = new google.maps.MarkerImage(
-        'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor +
-        '|40|_|%E2%80%A2',
-        new google.maps.Size(21, 34),
-        new google.maps.Point(0, 0),
-        new google.maps.Point(10, 34),
-        new google.maps.Size(21,34));
-      return markerImage;
+  self.removeMarkers = function() {
+    for (var i = 0; i < markers.length; i++) {
+      markers[i].setMap(null);
     }
+    markers.length = 0;
   };
 
   self.fliterInfo = function(clickedItem) {
     // teamsList.removeAll();
     displayFlitedteams(clickedItem, teams);
-    // initMap();
     console.log(clickedItem);
   };
 
@@ -333,6 +362,8 @@ function displayFlitedteams(conf, teams) {
       teamsList.push(team);
     }
   }, this);
+  removeMarkers();
+  renderMarkers();
 }
 
 //request newsList

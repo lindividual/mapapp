@@ -99,6 +99,8 @@ ul {
 
 .pop-window {
   background-color: white;
+  border-radius: 5px;
+  box-shadow: 0px 1px 5px 1px rgba(0, 0, 0, 0.2);
   position: absolute;
   top: 10%;
   left: 15%;
@@ -111,7 +113,13 @@ ul {
 }
 
 .close {
+  cursor: default;
   position: absolute;
   right: 16px;
   top: 16px;
+}
+
+.close:hover {
+  text-decoration: underline;
+  color: blue;
 }
