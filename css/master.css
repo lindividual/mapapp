@@ -4,6 +4,10 @@ html,body {
   padding: 0;
 }
 
+h2 {
+  font-size: 16px;
+}
+
 .float {
   position: fixed;
   margin: 10px;
@@ -27,7 +31,7 @@ html,body {
 .options {
   float: left;
   text-align: center;
-  width: 70px;
+  width: 32%;
   position: relative;
   padding: 6px 0;
   border: solid;
@@ -68,8 +72,13 @@ ul {
 }
 
 .title {
-  margin-top: 8px;
+  margin-top: 0px;
   margin-bottom: 8px;
+}
+
+.title:before {
+  content:url(img/menu.png);
+  padding-right: 8px;
 }
 
 #map {
@@ -85,6 +94,7 @@ ul {
   width: 100%;
   height: 60%;
 }
+
 .pop-window-bg {
   background-color: rgba(0, 0, 0, 0.2);
   position: absolute;
@@ -98,6 +108,7 @@ ul {
 }
 
 .pop-window {
+  box-sizing: border-box;
   background-color: white;
   border-radius: 5px;
   box-shadow: 0px 1px 5px 1px rgba(0, 0, 0, 0.2);
@@ -112,6 +123,13 @@ ul {
   z-index: 20;
 }
 
+.pop-window-title {
+  margin-top: 0px;
+  margin-bottom: 8px;
+  width: 85%;
+  font-size: 24px;
+}
+
 .close {
   cursor: default;
   position: absolute;
@@ -122,4 +140,27 @@ ul {
 .close:hover {
   text-decoration: underline;
   color: blue;
+}
+
+@media (max-width: 376px) {
+  .float {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 16px;
+    width: 100%;
+  }
+  .pop-window {
+    box-sizing: border-box;
+    background-color: white;
+    box-shadow: 0px 1px 5px 1px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    top: 20%;
+    left: 0;
+    margin: 0 auto;
+    padding: 16px;
+    width: 100%;
+    height: 80%;
+    overflow-y: scroll;
+    z-index: 20;
+  }
 }

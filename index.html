@@ -2,6 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
     <title>Map App</title>
     <script src="js/knockout-3.4.2.js" charset="utf-8"></script>
     <script src="js/jquery.min.js" charset="utf-8"></script>
@@ -9,15 +10,15 @@
   </head>
   <body>
     <div class="float">
-      <p data-bind="text: title" class="title"></p>
-      <div class="fliter">
-        <ul data-bind="foreach: fliter">
-          <li class="options list-item-title" data-bind="text: $data, click: fliterInfo"></li>
+      <p data-bind="click: fliterDisplayToggle" class="title">Home of NBA Teams</p>
+      <div class="fliter" data-bind="visible: fliterOn">
+        <ul data-bind="foreach: fliter" >
+          <li class="options list-item-title" data-bind="text: $data, click: clickFliter"></li>
         </ul>
       </div>
-      <div data-bind="foreach: teamsList" class="list-view">
+      <div data-bind="foreach: teamsList, visible: fliterOn" class="list-view">
         <div class="list-item">
-          <p data-bind="text: home, click: selectedHome" class="list-item-title"></p>
+          <p data-bind="text: home, click: selectHome" class="list-item-title"></p>
           <p data-bind="text: team"class="list-item-description"></p>
         </div>
         <!-- <p data-bind="text: name" class="list-item-title"></p>
@@ -27,7 +28,7 @@
     <div class="back-ground" id="map"></div>
     <div class="pop-window-bg" data-bind="visible: showNewsList">
       <div class="pop-window">
-        <h1 class="title" data-bind="text: windowTitle">Detail</h1>
+        <div class="pop-window-title" data-bind="text: windowTitle">Detail</div>
         <div class="close" data-bind="click: closePopWindow">close</div>
         <div id="pano"></div>
         <div class="news-list">

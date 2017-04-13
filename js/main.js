@@ -226,22 +226,22 @@ var newsList = [];
 //array store the teams that will be display
 var displayteams = [].concat(teams);
 
+//array store the markers on the map
+var markers = [];
 
 //view model
 var viewModel = function() {
   var self = this;
-  //bindings
-  self.title = ko.observable(bigTitle);
+
+  self.fliterOn = ko.observable(true);
   self.windowTitle = ko.observable(bigTitle);
   self.fliter = ko.observableArray(conference);
   self.teamsList = ko.observableArray(displayteams);
   self.newsList = ko.observableArray(newsList);
   self.showNewsList = ko.observable(false);
 
-  var markers = [];
-
   self.initMap = function() {
-  //create a new map
+    //create a new map
     map = new google.maps.Map(document.getElementById('map'), {
       center: {lat: 40.7713024, lng: -73.9632393},
       zoom: 15
@@ -264,43 +264,19 @@ var viewModel = function() {
         new google.maps.Size(21,34));
       return markerImage;
     }
-    // for (var i = 0; i < displayteams.length; i++) {
-    //   var position = displayteams[i].position;
-    //   var title = displayteams[i].home;
-    //   //create a marker pre location
-    //   var marker = new google.maps.Marker({
-    //     position: position,
-    //     title: title,
-    //     animation: google.maps.Animation.DROP,
-    //     icon: defaultIcon,
-    //     id: i
-    //   });
-    //   //show marker
-    //   marker.setMap(map);
-    //   //create an onclick event to open the infowindow at each marker
-    //   marker.addListener('click', function() {
-    //     showNewsList(true);
-    //     windowTitle(this.title);
-    //     popInfoWindow(this);
-    //     requestNewsList(this.title);
-    //   });
-    //   //push the marker into markers array
-    //   markers.push(marker);
-    //   //set bounds
-    //   bounds.extend(marker.position);
   };
-    //marker style
-    
 
   self.renderMarkers = function() {
     console.log('startRendering');
     for (var i = 0; i < teamsList().length; i++) {
       var position = teamsList()[i].position;
       var title = teamsList()[i].home;
+      var team = teamsList()[i].team;
       //create a marker pre location
       var marker = new google.maps.Marker({
         position: position,
         title: title,
+        team: team,
         icon: defaultIcon,
         id: i
       });
@@ -309,9 +285,9 @@ var viewModel = function() {
       //create an onclick event to open the infowindow at each marker
       marker.addListener('click', function() {
         showNewsList(true);
-        windowTitle(this.title);
+        windowTitle(this.team);
         popInfoWindow(this);
-        requestNewsList(this.title);
+        requestNewsList(this.team);
       });
       //push the marker into markers array
       markers.push(marker);
@@ -328,13 +304,12 @@ var viewModel = function() {
     markers.length = 0;
   };
 
-  self.fliterInfo = function(clickedItem) {
-    // teamsList.removeAll();
+  self.clickFliter = function(clickedItem) {
     displayFlitedteams(clickedItem, teams);
     console.log(clickedItem);
   };
 
-  self.selectedHome = function(clickedItem) {
+  self.selectHome = function(clickedItem) {
     var homeTitle = clickedItem.home;
     for (var i = 0; i < markers.length; i++) {
         var markerTitle = markers[i].title;
@@ -352,6 +327,14 @@ var viewModel = function() {
   self.closePopWindow = function() {
     showNewsList(false);
   };
+
+  self.fliterDisplayToggle = function() {
+    if (fliterOn() === true) {
+      fliterOn(false);
+    } else {
+      fliterOn(true);
+    }
+  }
 };
 
 //generate the displayteams list
@@ -380,8 +363,8 @@ function requestNewsList(keyWord) {
     console.log('done!');
     newsList.removeAll();
     for (var i = 0; i < 5; i++) {
-      var newsTitle = result.response.docs[i].headline.print_headline;
-      newsList.push(newsTitle); 
+      var newsTitle = result.response.docs[i].headline.main;
+      newsList.push(newsTitle);
     }
   }).fail(function(err) {
     throw err;
