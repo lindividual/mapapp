@@ -281,16 +281,18 @@ var teams = [
 ];
 
 //newList
-var newsList = [];
+var newsList = [{title: '', newsUrl: ''}];
+
+//array store the teams that will be display
+var displayteams = [].concat(teams);
 
 //view model
 var viewModel = function() {
   var self = this;
-
   self.fliterOn = ko.observable(true);
   self.windowTitle = ko.observable(bigTitle);
   self.fliter = ko.observableArray(conference);
-  self.teamsList = ko.observableArray(teams);
+  self.teamsList = ko.observableArray(displayteams);
   self.newsList = ko.observableArray(newsList);
   self.showNewsList = ko.observable(false);
 
@@ -320,6 +322,7 @@ var viewModel = function() {
       team.marker.setMap(map);
       //onclick event
       team.marker.addListener('click', function() {
+        this.setAnimation(google.maps.Animation.DROP);
         showNewsList(true);
         windowTitle(this.title);
         popInfoWindow(this);
@@ -331,13 +334,6 @@ var viewModel = function() {
     map.fitBounds(bounds);
   };
 
-  self.removeMarkers = function() {
-    for (var i = 0; i < markers.length; i++) {
-      markers[i].setMap(null);
-    }
-    markers.length = 0;
-  };
-
   self.clickFliter = function(clickedItem) {
     displayFlitedteams(clickedItem, teams);
     console.log(clickedItem);
@@ -345,21 +341,18 @@ var viewModel = function() {
 
   self.selectHome = function(clickedItem) {
     var homeTitle = clickedItem.home;
-    for (var i = 0; i < markers.length; i++) {
-        var markerTitle = markers[i].title;
-        if (homeTitle == markerTitle) {
-          showNewsList(true);
-          windowTitle(markerTitle);
-          popInfoWindow(markers[i]);
-          requestNewsList(markerTitle);
-        } else {
-          console.log('not me');
-        }
-    }
+    teamsList().forEach(function(team) {
+      if (homeTitle == team.marker.title) {
+        google.maps.event.trigger(team.marker, 'click');
+        console.log('trigger fired');
+      }
+    })
   };
 
   self.closePopWindow = function() {
     showNewsList(false);
+    newsList.removeAll();
+    console.log('clear');
   };
 
   self.fliterDisplayToggle = function() {
@@ -377,18 +370,23 @@ function displayFlitedteams(conf, teams) {
   teams.forEach(function(team) {
     if (team.conf == conf || conf == 'All') {
       teamsList.push(team);
+      team.marker.setVisible(true);
+    }else {
+      team.marker.setVisible(false);
     }
   }, this);
-  removeMarkers();
-  renderMarkers();
 }
 
 //request newsList
 function requestNewsList(keyWord) {
+  newsList.removeAll();
+  newsList.push({title: "loading...", newsUrl: ''});
+
   var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
   url += '?' + $.param({
     'api-key': "bd9a2c95d47c48ba87a31333fcba2648",
-    'q': keyWord
+    'q': keyWord,
+    'sort': "newest"
   });
   $.ajax({
     url: url,
@@ -398,10 +396,13 @@ function requestNewsList(keyWord) {
     newsList.removeAll();
     for (var i = 0; i < 5; i++) {
       var newsTitle = result.response.docs[i].headline.main;
-      newsList.push(newsTitle);
+      var newsUrl = result.response.docs[i].web_url;
+      newsList.push({title: newsTitle, newsUrl: newsUrl});
     }
   }).fail(function(err) {
-    throw err;
+    console.log('fail')
+    newsList.removeAll();
+    newsList.push({title: "loading fail, please try later", newsUrl: ''});
   });
 }
 
@@ -432,6 +433,10 @@ function popInfoWindow(marker) {
     // Use streetview service to get the closest streetview image within
     // 50 meters of the markers position
     streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
+}
+
+function googleError() {
+  alert('Loading Map Failed, please try again later!');
 }
 
 //activates knokout.js

@@ -33,15 +33,16 @@
         <div id="pano"></div>
         <div class="news-list">
           <h2>News</h2>
-          <ul data-bind="foreach: newsList">
-            <li class="list-item-title" data-bind="text: $data"></li>
-          </ul>
+          <div data-bind="foreach: newsList">
+            <a data-bind="attr: { href: newsUrl }, text: title">
+</a>
+          </div>
         </div>
       </div>
     </div>
     <script src="js/main.js" charset="utf-8"></script>
     <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-qtT3pvGDyIvFCYyeqeCCngYfaZ-bHqg&callback=initMap" charset="utf-8">
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-qtT3pvGDyIvFCYyeqeCCngYfaZ-bHqg&callback=initMap" onerror="googleError()" charset="utf-8">
     </script>
   </body>
 </html>
